@@ -72,7 +72,7 @@ lev()
 #define Lowcase(x) ((isalpha(x) && isupper(x))? tolower(x) : (x))
 
 enum e_com {READ, PC, HELP, QUIT, LEV, LOGIC, FLT_COL, FLT_DRP}; // Akash
-enum e_state {EXEC, CKTLD, CKTLVL};         /* Gstate values */ // Akash
+enum e_state {EXEC, CKTLD, CKTLVL, CKTCOL};         /* Gstate values */ // Akash
 enum e_ntype {GATE, PI, FB, PO};    /* column 1 of circuit format */
 enum e_gtype {IPT, BRCH, XOR, OR, NOR, NOT, NAND, AND};  /* gate types */
 
@@ -753,7 +753,7 @@ fault_collapsing()
 	gen_faults();
 
 	print_faults();
-	Gstate = CKTLVL;
+	Gstate = CKTCOL;	// Stating that the circuit is done for Fault Collapsing and that a file has been generated for it
 }
 
 gen_faults()	// - Done
