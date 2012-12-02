@@ -1,8 +1,8 @@
 //Akash
 //For Debugging the fault
 // % /usr/usc/bin/gdb (program name)
-// %r for run
-// %bt for bac trace to the problem
+// % r for run
+// % bt for bac trace to the problem
 //Akash
 
 /*=======================================================================
@@ -107,7 +107,7 @@ struct cmdstruc command[NUMFUNCS] = {
    {"LEV", lev, CKTLD},
    {"LOGIC", SimpleLogicSimulation, CKTLD},
    {"FLT_COL", fault_collapsing, CKTLVL},	//Akash
-   {"FLT_DRP", fault_dropping, CKTLVL}	//Akash
+   {"FLT_DRP", fault_dropping, CKTCOL}	//Akash
 };
 
 /*------------------------------------------------------------------------*/
@@ -751,7 +751,6 @@ int num;
 fault_collapsing()
 {
 	gen_faults();
-
 	print_faults();
 	Gstate = CKTCOL;	// Stating that the circuit is done for Fault Collapsing and that a file has been generated for it
 }
@@ -780,6 +779,7 @@ gen_faults()	// - Done
 	{
 		Node[i].fault[0] = '1'; // considering everything is required in the beginning
 		Node[i].fault[1] = '1';
+		//add more similarly if you want to add valid data
 	}
 	
 	
@@ -943,13 +943,13 @@ print_faults() // - Done
 
 	for(i = 0; i < Nnodes; i++)
 	{
-		if(Node[i].fault[0] == '1')
+		if(Node[i].fault[0] == '1') // Stuck at 0 Fault
 		{
 			//fprintf(flts,"%d %d %c \n", Node[i].num, Node[i].indx,'0');
 			fprintf(flts,"%d %c \n", Node[i].num,'0');
 		}
 
-		if(Node[i].fault[1] == '1')
+		if(Node[i].fault[1] == '1') // Stuck at 1 Fault
 		{
 			//fprintf(flts,"%d %d %c \n", Node[i].num, Node[i].indx,'1');
 			fprintf(flts,"%d %c \n", Node[i].num,'1');
@@ -960,8 +960,26 @@ print_faults() // - Done
 }
 
 
-fault_dropping() // - Later
+fault_dropping() // - In Process
 {
 	printf("Need to Drop \n");
+	
+	// ** ALGORITHM **
+	
+	// You start with a vector which you need to check if helps in collapsing
+	// After getting the vector, we need to check the list for the remaining faults (for loop or while loop)
+	// We might need two variable as loop variables (or just flag), one for indx and the other is stk 0 or 1 checking value
+	// We need to pick one fault and excite the fault (includes initialization of X and Kai)
+	// After doing that, we will have to do fault simulation with the provided vector.
+	// Main point is to make sure in simulation is that we do not overwrite the fault which we excited
+	// The vector that we applied can also be made more specific
+	// After complete simulation, we need to check if any of the PO has D or B as its output
+	// If we get that, we send back 1 to flt_drp function
+	// After coming back, we check the return value. So its a variable
+	// If the value is one, then that gate fault accessed before can now be removed
+	// 
+	
+	
+	
 }
 
